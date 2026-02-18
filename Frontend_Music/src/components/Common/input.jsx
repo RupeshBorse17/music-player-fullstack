@@ -86,7 +86,7 @@
 // export default Input;
 
 import React, { useState } from "react";
-import "../../css/auth/input.css";
+import "../../css/auth/Input.css";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 const Input = ({ label, type, placeholder, value, onChange }) => {
