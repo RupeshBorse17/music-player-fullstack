@@ -71,11 +71,7 @@ const PORT = process.env.PORT || 5001;
 const app = express(); // ✅ MUST be here
 
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://music-player-app-f9sz-git-main-rupesh-borses-projects.vercel.app",
-    "https://music-player-app-f9sz-7vhe5i5nr-rupesh-borses-projects.vercel.app"
-  ],
+ 
   credentials: true
 }));
 
