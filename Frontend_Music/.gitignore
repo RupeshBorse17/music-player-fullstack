@@ -56,4 +56,5 @@ Frontend_Music/.env
 *.njsproj
 *.sln
 *.sw?
+backend/.env
 
