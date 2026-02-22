@@ -31,6 +31,7 @@ const SongList = ({ songs,onSelectSong, currentIndex }) => {
           </colgroup>
 
           <thead>
+            
             <tr>
               <th className="songlist-th th-index">No</th>
               <th className="songlist-th">Name</th>
