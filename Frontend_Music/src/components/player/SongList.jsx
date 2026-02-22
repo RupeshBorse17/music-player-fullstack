@@ -39,6 +39,7 @@ const SongList = ({ songs,onSelectSong, currentIndex }) => {
               <th className="songlist-th th-duration">Duration</th>
             </tr>
           </thead>
+        
 
           <tbody>
             {songs.map((song, index) => (
