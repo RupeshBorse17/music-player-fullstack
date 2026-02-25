@@ -71,9 +71,14 @@ const PORT = process.env.PORT || 5001;
 const app = express(); // ✅ MUST be here
 
 app.use(cors({
-  origin: process.env.VITE_BASE_URL,
+  origin: "*",
   credentials: true
 }));
+
+// app.use(cors({
+//   origin: process.env.VITE_BASE_URL,
+//   credentials: true
+// }));
 app.use(express.json());
 
 //Connect DB
