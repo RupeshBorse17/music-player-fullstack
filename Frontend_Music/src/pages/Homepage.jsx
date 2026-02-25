@@ -807,6 +807,197 @@
 
 // export default Homepage;
 
+// import React, { useState, useEffect } from "react";
+// import { useSelector } from "react-redux";
+// import axios from "axios";
+
+// import Footer from "../components/layout/Footer";
+// import SideMenu from "../components/layout/SideMenu";
+// import MainArea from "../components/layout/MainArea";
+
+// import Modal from "../components/Common/Modal";
+// import EditProfile from "../components/auth/EditProfile";
+
+// import "../css/pages/HomePage.css";
+// import useAudioPlayer from "../hooks/useAudioPlayer";
+
+// const Homepage = () => {
+//   const [view, setView] = useState("home");
+//   const [songs, setSongs] = useState([]);
+//   const [searchSongs, setSearchSongs] = useState([]);
+
+//   const [openEditProfile, setOpenEditProfile] = useState(false);
+
+//   const auth = useSelector((state) => state.auth);
+
+//   const songToDisplay = view === "search" ? searchSongs : songs;
+
+//   const {
+//     audioRef,
+//     currentIndex,
+//     currentSong,
+//     isPlaying,
+//     currentTime,
+//     duration,
+//     isMuted,
+//     loopEnabled,
+//     shuffleEnabled,
+//     playbackSpeed,
+//     volume,
+//     playSongAtIndex,
+//     handleTogglePlay,
+//     handleNext,
+//     handlePrev,
+//     handleTimeUpdate,
+//     handleLoadedMetadata,
+//     handleEnded,
+//     handleToggleMute,
+//     handleToggleLoop,
+//     handleToggleShuffle,
+//     handleChangeSpeed,
+//     handleSeek,
+//     handleChangeVolume,
+//   } = useAudioPlayer(songToDisplay);
+
+//   const playerState = {
+//     currentSong,
+//     isPlaying,
+//     currentTime,
+//     duration,
+//     isMuted,
+//     loopEnabled,
+//     shuffleEnabled,
+//     playbackSpeed,
+//     volume,
+//   };
+
+//   const playerControls = {
+//     playSongAtIndex,
+//     handleTogglePlay,
+//     handleNext,
+//     handlePrev,
+//     handleSeek,
+//   };
+
+//   const playerFeatures = {
+//     onToggleMute: handleToggleMute,
+//     onToggleLoop: handleToggleLoop,
+//     onToggleShuffle: handleToggleShuffle,
+//     onChangeSpeed: handleChangeSpeed,
+//     onChangeVolume: handleChangeVolume,
+//   };
+
+//   // Fetch Songs initially
+//   useEffect(() => {
+//     const fetchInitialSongs = async () => {
+//       try {
+//         const res = await axios.get(
+//           `${import.meta.env.VITE_BASE_URL}/api/songs`
+//         );
+//         setSongs(res.data.results || []);
+//       } catch (error) {
+//         console.error("Error while fetching songs", error);
+//         setSongs([]);
+//       }
+//     };
+
+//     fetchInitialSongs();
+//   }, []);
+
+//   // Load playlist by tag
+//   const loadPlaylist = async (tag) => {
+//     if (!tag) return;
+
+//     try {
+//       const res = await axios.get(
+//         `${import.meta.env.VITE_BASE_URL}/api/songs/playlistByTag/${tag}`
+//       );
+//       setSongs(res.data.results || []);
+//       setView("home");
+//     } catch (error) {
+//       console.error("Failed to load playlist", error);
+//       setSongs([]);
+//     }
+//   };
+
+//   // When user selects a song
+//   const handleSelectSong = (index) => {
+//     setView("home");
+//     playSongAtIndex(index);
+//   };
+
+//   // When user selects favourite song
+//   const handlePlayFavourite = (song) => {
+//     const favourites = auth.user?.favourites || [];
+//     if (!favourites.length) return;
+
+//     const index = favourites.findIndex((fav) => fav._id === song._id);
+
+//     setView("home");
+
+//     setTimeout(() => {
+//       if (index !== -1) {
+//         playSongAtIndex(index);
+//       }
+//     }, 0);
+//   };
+
+//   return (
+//     <div className="homepage-root">
+//       {/* Audio Player */}
+//       <audio
+//         ref={audioRef}
+//         onTimeUpdate={handleTimeUpdate}
+//         onLoadedMetadata={handleLoadedMetadata}
+//         onEnded={handleEnded}
+//       >
+//         {currentSong && <source src={currentSong.audio} type="audio/mpeg" />}
+//       </audio>
+
+//       <div className="homepage-main-wrapper">
+//         {/* Sidebar */}
+//         <div className="homepage-sidebar">
+//           <SideMenu
+//             setView={setView}
+//             view={view}
+//             onOpenEditProfile={() => setOpenEditProfile(true)}
+//           />
+//         </div>
+
+//         {/* Main Content */}
+//         <div className="homepage-content">
+//           <MainArea
+//             view={view}
+//             currentIndex={currentIndex}
+//             onSelectSong={handleSelectSong}
+//             onSelectfavourite={handlePlayFavourite}
+//             onSelectTag={loadPlaylist}
+//             songToDisplay={songToDisplay}
+//             setSearchSongs={setSearchSongs}
+//           />
+//         </div>
+//       </div>
+
+//       {/* Footer */}
+//       <Footer
+//         playerState={playerState}
+//         playerControls={playerControls}
+//         playerFeatures={playerFeatures}
+//       />
+
+//       {/* Edit Profile Modal */}
+//       {openEditProfile && (
+//         <Modal onClose={() => setOpenEditProfile(false)}>
+//           <EditProfile onClose={() => setOpenEditProfile(false)} />
+//         </Modal>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Homepage;
+
+
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -821,11 +1012,15 @@ import EditProfile from "../components/auth/EditProfile";
 import "../css/pages/HomePage.css";
 import useAudioPlayer from "../hooks/useAudioPlayer";
 
+// ✅ Safe BASE URL fallback
+const BASE_URL =
+  import.meta.env.VITE_BASE_URL ||
+  "https://music-player-fullstack-60ns.onrender.com";
+
 const Homepage = () => {
   const [view, setView] = useState("home");
   const [songs, setSongs] = useState([]);
   const [searchSongs, setSearchSongs] = useState([]);
-
   const [openEditProfile, setOpenEditProfile] = useState(false);
 
   const auth = useSelector((state) => state.auth);
@@ -887,16 +1082,18 @@ const Homepage = () => {
     onChangeVolume: handleChangeVolume,
   };
 
-  // Fetch Songs initially
+  // 🔥 Fetch initial songs
   useEffect(() => {
     const fetchInitialSongs = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/songs`
+          `${BASE_URL}/api/songs`,
+          { withCredentials: true }
         );
+
         setSongs(res.data.results || []);
       } catch (error) {
-        console.error("Error while fetching songs", error);
+        console.error("Error fetching songs:", error);
         setSongs([]);
       }
     };
@@ -904,42 +1101,43 @@ const Homepage = () => {
     fetchInitialSongs();
   }, []);
 
-  // Load playlist by tag
+  // 🔥 Load playlist by tag
   const loadPlaylist = async (tag) => {
     if (!tag) return;
 
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/api/songs/playlistByTag/${tag}`
+        `${BASE_URL}/api/songs/playlistByTag/${encodeURIComponent(tag)}`,
+        { withCredentials: true }
       );
+
       setSongs(res.data.results || []);
       setView("home");
     } catch (error) {
-      console.error("Failed to load playlist", error);
+      console.error("Failed to load playlist:", error);
       setSongs([]);
     }
   };
 
-  // When user selects a song
+  // 🔥 When user selects a song
   const handleSelectSong = (index) => {
     setView("home");
     playSongAtIndex(index);
   };
 
-  // When user selects favourite song
+  // 🔥 Play favourite song
   const handlePlayFavourite = (song) => {
     const favourites = auth.user?.favourites || [];
     if (!favourites.length) return;
 
-    const index = favourites.findIndex((fav) => fav._id === song._id);
+    const index = favourites.findIndex(
+      (fav) => fav.id === song.id // ✅ consistent id
+    );
 
-    setView("home");
-
-    setTimeout(() => {
-      if (index !== -1) {
-        playSongAtIndex(index);
-      }
-    }, 0);
+    if (index !== -1) {
+      setView("home");
+      playSongAtIndex(index);
+    }
   };
 
   return (
@@ -951,7 +1149,9 @@ const Homepage = () => {
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
       >
-        {currentSong && <source src={currentSong.audio} type="audio/mpeg" />}
+        {currentSong && (
+          <source src={currentSong.audio} type="audio/mpeg" />
+        )}
       </audio>
 
       <div className="homepage-main-wrapper">

@@ -2,6 +2,473 @@
 
 
 
+// // import React, { useState } from "react";
+// // import Input from "../Common/input";
+// // import { useSelector, useDispatch } from "react-redux";
+// // import {
+// //   clearError,
+// //   setError,
+// //   setLoading,
+// //   setUser,
+// //   closeAuthModal,
+// // } from "../../redux/slices/authSlice";
+// // import { switchAuthModal } from "../../redux/slices/UI_Slices";
+// // import "../../css/auth/Login.css";
+
+// // import axios from "axios";
+// // import validator from "validator";
+
+// // const Login = () => {
+// //   const [email, setemail] = useState("");
+// //   const [password, setpassword] = useState("");
+
+// //   // forgot password states
+// //   const [forgotEmail, setforgotEmail] = useState("");
+// //   const [forgotMsg, setforgotMsg] = useState("");
+
+// //   const dispatch = useDispatch();
+
+// //   const { isLoading, error } = useSelector((state) => state.auth);
+// //   const { authMode } = useSelector((state) => state.ui);
+
+// //   // ✅ FIXED (must match "forgot")
+// //   const isforgot = authMode === "forgot";
+
+// //   // ---------------- LOGIN ----------------
+// //   const handleLogin = async (e) => {
+// //     e.preventDefault();
+// //     dispatch(clearError());
+
+// //     if (!validator.isEmail(email)) {
+// //       dispatch(setError("Please enter a valid email address"));
+// //       return;
+// //     }
+
+// //     if (!password) {
+// //       dispatch(setError("Please enter your password"));
+// //       return;
+// //     }
+
+// //     dispatch(setLoading(true));
+
+// //     try {
+// //       const res = await axios.post(
+// //         `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
+// //         {
+// //           email,
+// //           password,
+// //         }
+// //       );
+
+// //       const data = res.data || {};
+
+// //       dispatch(
+// //         setUser({
+// //           user: data.user,
+// //           token: data.token,
+// //         })
+// //       );
+
+// //       localStorage.setItem("Token", data.token);
+
+// //       dispatch(closeAuthModal());
+
+// //       console.log("Login successful");
+// //     } catch (error) {
+// //       const serverMessage =
+// //         error?.response?.data?.message || error?.response?.data?.error;
+
+// //       dispatch(setError(serverMessage || "Login Failed"));
+// //     }
+// //   };
+
+// //   // ---------------- FORGOT PASSWORD ----------------
+// //   const handleForgotpassword = async () => {
+// //     if (!forgotEmail) {
+// //       setforgotMsg("Please enter your email ❌");
+// //       return;
+// //     }
+
+// //     if (!validator.isEmail(forgotEmail)) {
+// //       setforgotMsg("Please enter a valid email address ❌");
+// //       return;
+// //     }
+
+// //     try {
+// //       setforgotMsg("Sending reset link... ⏳");
+
+// //       await axios.post(
+// //         `${import.meta.env.VITE_BASE_URL}/api/auth/forgot-password`,
+// //         {
+// //           email: forgotEmail,
+// //         }
+// //       );
+
+// //       setforgotMsg("Reset link sent! Check your Email 📧✅");
+// //     } catch (error) {
+// //       setforgotMsg(
+// //         error?.response?.data?.message || "Failed to send reset email ❌"
+// //       );
+// //     }
+// //   };
+
+// //   return (
+// //     <div className="login-wrapper">
+// //       <h3 className="login-title">
+// //         {isforgot ? "Forgot Password" : "Welcome Back"}
+// //       </h3>
+
+// //       <p className="login-subtitle">
+// //         {isforgot
+// //           ? "Enter your registered email to reset password"
+// //           : "Please enter your details to login"}
+// //       </p>
+
+// //       <form className="login-form" onSubmit={handleLogin}>
+// //         {/* ---------------- LOGIN FORM ---------------- */}
+// //         {!isforgot && (
+// //           <>
+// //             <Input
+// //               value={email}
+// //               onChange={(e) => setemail(e.target.value)}
+// //               label={"Email Address"}
+// //               placeholder={"xyz@gmail.com"}
+// //               type="email"
+// //             />
+
+// //             <Input
+// //               value={password}
+// //               onChange={(e) => setpassword(e.target.value)}
+// //               label="Password"
+// //               placeholder={"Min 8 Character"}
+// //               type="password"
+// //             />
+// //           </>
+// //         )}
+
+// //         {/* ---------------- FORGOT PASSWORD UI ---------------- */}
+// //         <div className="forgot-wrapper">
+// //           {!isforgot ? (
+// //             <>
+// //               <span
+// //                 className="forgot-link"
+// //                 onClick={() => {
+// //                   dispatch(clearError());
+// //                   dispatch(switchAuthModal("forgot"));
+// //                 }}
+// //               >
+// //                 Forgot password?
+// //               </span>
+
+// //               <span
+// //                 className="forgot-link"
+// //                 onClick={() => {
+// //                   dispatch(clearError());
+// //                   dispatch(switchAuthModal("signup")); // ✅ FIXED
+// //                 }}
+// //               >
+// //                 Don't have an account? Sign up
+// //               </span>
+// //             </>
+// //           ) : (
+// //             <div className="forgot-box">
+// //               <Input
+// //                 label="Email"
+// //                 type="email"
+// //                 placeholder="Enter your registered email"
+// //                 value={forgotEmail}
+// //                 onChange={(e) => setforgotEmail(e.target.value)}
+// //               />
+
+// //               {forgotMsg && <p className="forgot-msg">{forgotMsg}</p>}
+
+// //               <button
+// //                 type="button"
+// //                 className="forgot-btn"
+// //                 onClick={handleForgotpassword}
+// //               >
+// //                 Send the Reset Link
+// //               </button>
+
+// //               {/* Back to Login */}
+// //               <span
+// //                 className="forgot-link"
+// //                 onClick={() => {
+// //                   setforgotMsg("");
+// //                   dispatch(clearError());
+// //                   dispatch(switchAuthModal("Login"));
+// //                 }}
+// //               >
+// //                 Back to Login 🔙
+// //               </span>
+// //             </div>
+// //           )}
+// //         </div>
+
+// //         {/* Error Message */}
+// //         {error && <div className="login-error">{error}</div>}
+
+// //         {/* Submit Button */}
+// //         {!isforgot && (
+// //           <button
+// //             type="submit"
+// //             className="login-submit-btn"
+// //             disabled={isLoading}
+// //           >
+// //             <span>{isLoading ? "Logging in..." : "Login"}</span>
+// //           </button>
+// //         )}
+// //       </form>
+// //     </div>
+// //   );
+// // };
+
+// // export default Login;
+
+
+// // import React, { useState } from "react";
+// // import Input from "../Common/input";
+// // import { useSelector, useDispatch } from "react-redux";
+// // import {
+// //   clearError,
+// //   setError,
+// //   setLoading,
+// //   setUser,
+// //   closeAuthModal,
+// // } from "../../redux/slices/authSlice";
+// // import { switchAuthModal } from "../../redux/slices/UI_Slices";
+// // import "../../css/auth/Login.css";
+
+// // import axios from "axios";
+// // import validator from "validator";
+
+// // const Login = () => {
+// //   const [email, setemail] = useState("");
+// //   const [password, setpassword] = useState("");
+
+// //   // forgot password states
+// //   const [forgotEmail, setforgotEmail] = useState("");
+// //   const [forgotMsg, setforgotMsg] = useState("");
+
+// //   const dispatch = useDispatch();
+
+// //   const { isLoading, error } = useSelector((state) => state.auth);
+// //   const { authMode } = useSelector((state) => state.ui);
+
+// //   const isforgot = authMode === "forgot";
+
+// //   // ---------------- LOGIN ----------------
+// //   const handleLogin = async (e) => {
+// //     e.preventDefault();
+
+// //     // ✅ CHANGE 1: Clear old error before starting login
+// //     dispatch(clearError());
+
+// //     if (!validator.isEmail(email)) {
+// //       dispatch(setError("Please enter a valid email address"));
+// //       return;
+// //     }
+
+// //     if (!password) {
+// //       dispatch(setError("Please enter your password"));
+// //       return;
+// //     }
+
+// //     dispatch(setLoading(true));
+
+// //     try {
+// //       const res = await axios.post(
+// //         `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
+// //         {
+// //           email,
+// //           password,
+// //         }
+// //       );
+
+// //       const data = res.data || {};
+
+// //       console.log("LOGIN RESPONSE DATA:", data);
+
+// //       dispatch(
+// //         setUser({
+// //           user: data.user,
+// //           token: data.token,
+// //         })
+// //       );
+
+// //       localStorage.setItem("Token", data.token);
+
+// //       // ✅ CHANGE 2: Stop loading after success
+// //       dispatch(setLoading(false));
+
+// //       // ✅ CHANGE 3: Clear error after success (important)
+// //       dispatch(clearError());
+
+// //       dispatch(closeAuthModal());
+
+// //       console.log("Login successful");
+// //     } catch (error) {
+// //       const serverMessage =
+// //         error?.response?.data?.message || error?.response?.data?.error;
+
+// //       dispatch(setError(serverMessage || "Login Failed"));
+
+// //       // ✅ CHANGE 4: Stop loading even when error happens
+// //       dispatch(setLoading(false));
+// //     }
+// //   };
+
+// //   // ---------------- FORGOT PASSWORD ----------------
+// //   const handleForgotpassword = async () => {
+// //     if (!forgotEmail) {
+// //       setforgotMsg("Please enter your email ❌");
+// //       return;
+// //     }
+
+// //     if (!validator.isEmail(forgotEmail)) {
+// //       setforgotMsg("Please enter a valid email address ❌");
+// //       return;
+// //     }
+
+// //     try {
+// //       setforgotMsg("Sending reset link... ⏳");
+
+// //       await axios.post(
+// //         `${import.meta.env.VITE_BASE_URL}/api/auth/forgot-password`,
+// //         {
+// //           email: forgotEmail,
+// //         }
+// //       );
+
+// //       setforgotMsg("Reset link sent! Check your Email 📧✅");
+// //     } catch (error) {
+// //       setforgotMsg(
+// //         error?.response?.data?.message || "Failed to send reset email ❌"
+// //       );
+// //     }
+// //   };
+
+// //   return (
+// //     <div className="login-wrapper">
+// //       <h3 className="login-title">
+// //         {isforgot ? "Forgot Password" : "Welcome Back"}
+// //       </h3>
+
+// //       <p className="login-subtitle">
+// //         {isforgot
+// //           ? "Enter your registered email to reset password"
+// //           : "Please enter your details to login"}
+// //       </p>
+
+// //       <form className="login-form" onSubmit={handleLogin}>
+// //         {/* ---------------- LOGIN FORM ---------------- */}
+// //         {!isforgot && (
+// //           <>
+// //             <Input
+// //               value={email}
+// //               onChange={(e) => setemail(e.target.value)}
+// //               label={"Email Address"}
+// //               placeholder={"xyz@gmail.com"}
+// //               type="email"
+// //               autoComplete="email"
+// //             />
+
+// //             <Input
+// //               value={password}
+// //               onChange={(e) => setpassword(e.target.value)}
+// //               label="Password"
+// //               placeholder={"Min 8 Character"}
+// //               type="password"
+// //               autoComplete="current-password"
+// //             />
+// //           </>
+// //         )}
+
+// //         {/* ---------------- FORGOT PASSWORD UI ---------------- */}
+// //         <div className="forgot-wrapper">
+// //           {!isforgot ? (
+// //             <>
+// //               <span
+// //                 className="forgot-link"
+// //                 onClick={() => {
+// //                   dispatch(clearError());
+// //                   dispatch(switchAuthModal("forgot"));
+// //                 }}
+// //               >
+// //                 Forgot password?
+// //               </span>
+
+// //               <span
+// //                 className="forgot-link"
+// //                 onClick={() => {
+// //                   dispatch(clearError());
+
+// //                   // ✅ CHANGE 5: signup link should open signup not forgot
+// //                   dispatch(switchAuthModal("signup"));
+// //                 }}
+// //               >
+// //                 Don't have an account? Sign up
+// //               </span>
+// //             </>
+// //           ) : (
+// //             <div className="forgot-box">
+// //               <Input
+// //                 label="Email"
+// //                 type="email"
+// //                 placeholder="Enter your registered email"
+// //                 value={forgotEmail}
+// //                 onChange={(e) => setforgotEmail(e.target.value)}
+// //                 autoComplete="email"
+// //               />
+
+// //               {forgotMsg && <p className="forgot-msg">{forgotMsg}</p>}
+
+// //               <button
+// //                 type="button"
+// //                 className="forgot-btn"
+// //                 onClick={handleForgotpassword}
+// //               >
+// //                 Send the Reset Link
+// //               </button>
+
+// //               {/* Back to Login */}
+// //               <span
+// //                 className="forgot-link"
+// //                 onClick={() => {
+// //                   setforgotMsg("");
+// //                   dispatch(clearError());
+
+// //                   // ✅ CHANGE 6: Back to login should switch to "Login"
+// //                   dispatch(switchAuthModal("Login"));
+// //                 }}
+// //               >
+// //                 Back to Login 🔙
+// //               </span>
+// //             </div>
+// //           )}
+// //         </div>
+
+// //         {/* Error Message */}
+// //         {error && <div className="login-error">{error}</div>}
+
+// //         {/* Submit Button */}
+// //         {!isforgot && (
+// //           <button
+// //             type="submit"
+// //             className="login-submit-btn"
+// //             disabled={isLoading}
+// //           >
+// //             <span>{isLoading ? "Logging in..." : "Login"}</span>
+// //           </button>
+// //         )}
+// //       </form>
+// //     </div>
+// //   );
+// // };
+
+// // export default Login;
+
+
 // import React, { useState } from "react";
 // import Input from "../Common/input";
 // import { useSelector, useDispatch } from "react-redux";
@@ -31,8 +498,7 @@
 //   const { isLoading, error } = useSelector((state) => state.auth);
 //   const { authMode } = useSelector((state) => state.ui);
 
-//   // ✅ FIXED (must match "forgot")
-//   const isforgot = authMode === "forgot";
+//   const isForgot = authMode === "forgot";
 
 //   // ---------------- LOGIN ----------------
 //   const handleLogin = async (e) => {
@@ -60,7 +526,7 @@
 //         }
 //       );
 
-//       const data = res.data || {};
+//       const data = res.data;
 
 //       dispatch(
 //         setUser({
@@ -71,249 +537,14 @@
 
 //       localStorage.setItem("Token", data.token);
 
-//       dispatch(closeAuthModal());
-
-//       console.log("Login successful");
-//     } catch (error) {
-//       const serverMessage =
-//         error?.response?.data?.message || error?.response?.data?.error;
-
-//       dispatch(setError(serverMessage || "Login Failed"));
-//     }
-//   };
-
-//   // ---------------- FORGOT PASSWORD ----------------
-//   const handleForgotpassword = async () => {
-//     if (!forgotEmail) {
-//       setforgotMsg("Please enter your email ❌");
-//       return;
-//     }
-
-//     if (!validator.isEmail(forgotEmail)) {
-//       setforgotMsg("Please enter a valid email address ❌");
-//       return;
-//     }
-
-//     try {
-//       setforgotMsg("Sending reset link... ⏳");
-
-//       await axios.post(
-//         `${import.meta.env.VITE_BASE_URL}/api/auth/forgot-password`,
-//         {
-//           email: forgotEmail,
-//         }
-//       );
-
-//       setforgotMsg("Reset link sent! Check your Email 📧✅");
-//     } catch (error) {
-//       setforgotMsg(
-//         error?.response?.data?.message || "Failed to send reset email ❌"
-//       );
-//     }
-//   };
-
-//   return (
-//     <div className="login-wrapper">
-//       <h3 className="login-title">
-//         {isforgot ? "Forgot Password" : "Welcome Back"}
-//       </h3>
-
-//       <p className="login-subtitle">
-//         {isforgot
-//           ? "Enter your registered email to reset password"
-//           : "Please enter your details to login"}
-//       </p>
-
-//       <form className="login-form" onSubmit={handleLogin}>
-//         {/* ---------------- LOGIN FORM ---------------- */}
-//         {!isforgot && (
-//           <>
-//             <Input
-//               value={email}
-//               onChange={(e) => setemail(e.target.value)}
-//               label={"Email Address"}
-//               placeholder={"xyz@gmail.com"}
-//               type="email"
-//             />
-
-//             <Input
-//               value={password}
-//               onChange={(e) => setpassword(e.target.value)}
-//               label="Password"
-//               placeholder={"Min 8 Character"}
-//               type="password"
-//             />
-//           </>
-//         )}
-
-//         {/* ---------------- FORGOT PASSWORD UI ---------------- */}
-//         <div className="forgot-wrapper">
-//           {!isforgot ? (
-//             <>
-//               <span
-//                 className="forgot-link"
-//                 onClick={() => {
-//                   dispatch(clearError());
-//                   dispatch(switchAuthModal("forgot"));
-//                 }}
-//               >
-//                 Forgot password?
-//               </span>
-
-//               <span
-//                 className="forgot-link"
-//                 onClick={() => {
-//                   dispatch(clearError());
-//                   dispatch(switchAuthModal("signup")); // ✅ FIXED
-//                 }}
-//               >
-//                 Don't have an account? Sign up
-//               </span>
-//             </>
-//           ) : (
-//             <div className="forgot-box">
-//               <Input
-//                 label="Email"
-//                 type="email"
-//                 placeholder="Enter your registered email"
-//                 value={forgotEmail}
-//                 onChange={(e) => setforgotEmail(e.target.value)}
-//               />
-
-//               {forgotMsg && <p className="forgot-msg">{forgotMsg}</p>}
-
-//               <button
-//                 type="button"
-//                 className="forgot-btn"
-//                 onClick={handleForgotpassword}
-//               >
-//                 Send the Reset Link
-//               </button>
-
-//               {/* Back to Login */}
-//               <span
-//                 className="forgot-link"
-//                 onClick={() => {
-//                   setforgotMsg("");
-//                   dispatch(clearError());
-//                   dispatch(switchAuthModal("Login"));
-//                 }}
-//               >
-//                 Back to Login 🔙
-//               </span>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Error Message */}
-//         {error && <div className="login-error">{error}</div>}
-
-//         {/* Submit Button */}
-//         {!isforgot && (
-//           <button
-//             type="submit"
-//             className="login-submit-btn"
-//             disabled={isLoading}
-//           >
-//             <span>{isLoading ? "Logging in..." : "Login"}</span>
-//           </button>
-//         )}
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
-
-// import React, { useState } from "react";
-// import Input from "../Common/input";
-// import { useSelector, useDispatch } from "react-redux";
-// import {
-//   clearError,
-//   setError,
-//   setLoading,
-//   setUser,
-//   closeAuthModal,
-// } from "../../redux/slices/authSlice";
-// import { switchAuthModal } from "../../redux/slices/UI_Slices";
-// import "../../css/auth/Login.css";
-
-// import axios from "axios";
-// import validator from "validator";
-
-// const Login = () => {
-//   const [email, setemail] = useState("");
-//   const [password, setpassword] = useState("");
-
-//   // forgot password states
-//   const [forgotEmail, setforgotEmail] = useState("");
-//   const [forgotMsg, setforgotMsg] = useState("");
-
-//   const dispatch = useDispatch();
-
-//   const { isLoading, error } = useSelector((state) => state.auth);
-//   const { authMode } = useSelector((state) => state.ui);
-
-//   const isforgot = authMode === "forgot";
-
-//   // ---------------- LOGIN ----------------
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-
-//     // ✅ CHANGE 1: Clear old error before starting login
-//     dispatch(clearError());
-
-//     if (!validator.isEmail(email)) {
-//       dispatch(setError("Please enter a valid email address"));
-//       return;
-//     }
-
-//     if (!password) {
-//       dispatch(setError("Please enter your password"));
-//       return;
-//     }
-
-//     dispatch(setLoading(true));
-
-//     try {
-//       const res = await axios.post(
-//         `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
-//         {
-//           email,
-//           password,
-//         }
-//       );
-
-//       const data = res.data || {};
-
-//       console.log("LOGIN RESPONSE DATA:", data);
-
-//       dispatch(
-//         setUser({
-//           user: data.user,
-//           token: data.token,
-//         })
-//       );
-
-//       localStorage.setItem("Token", data.token);
-
-//       // ✅ CHANGE 2: Stop loading after success
 //       dispatch(setLoading(false));
-
-//       // ✅ CHANGE 3: Clear error after success (important)
 //       dispatch(clearError());
-
 //       dispatch(closeAuthModal());
-
-//       console.log("Login successful");
 //     } catch (error) {
 //       const serverMessage =
 //         error?.response?.data?.message || error?.response?.data?.error;
 
 //       dispatch(setError(serverMessage || "Login Failed"));
-
-//       // ✅ CHANGE 4: Stop loading even when error happens
 //       dispatch(setLoading(false));
 //     }
 //   };
@@ -351,24 +582,24 @@
 //   return (
 //     <div className="login-wrapper">
 //       <h3 className="login-title">
-//         {isforgot ? "Forgot Password" : "Welcome Back"}
+//         {isForgot ? "Forgot Password" : "Welcome Back"}
 //       </h3>
 
 //       <p className="login-subtitle">
-//         {isforgot
+//         {isForgot
 //           ? "Enter your registered email to reset password"
 //           : "Please enter your details to login"}
 //       </p>
 
 //       <form className="login-form" onSubmit={handleLogin}>
 //         {/* ---------------- LOGIN FORM ---------------- */}
-//         {!isforgot && (
+//         {!isForgot && (
 //           <>
 //             <Input
 //               value={email}
 //               onChange={(e) => setemail(e.target.value)}
-//               label={"Email Address"}
-//               placeholder={"xyz@gmail.com"}
+//               label="Email Address"
+//               placeholder="xyz@gmail.com"
 //               type="email"
 //               autoComplete="email"
 //             />
@@ -377,7 +608,7 @@
 //               value={password}
 //               onChange={(e) => setpassword(e.target.value)}
 //               label="Password"
-//               placeholder={"Min 8 Character"}
+//               placeholder="Min 8 Character"
 //               type="password"
 //               autoComplete="current-password"
 //             />
@@ -386,7 +617,7 @@
 
 //         {/* ---------------- FORGOT PASSWORD UI ---------------- */}
 //         <div className="forgot-wrapper">
-//           {!isforgot ? (
+//           {!isForgot ? (
 //             <>
 //               <span
 //                 className="forgot-link"
@@ -402,8 +633,6 @@
 //                 className="forgot-link"
 //                 onClick={() => {
 //                   dispatch(clearError());
-
-//                   // ✅ CHANGE 5: signup link should open signup not forgot
 //                   dispatch(switchAuthModal("signup"));
 //                 }}
 //               >
@@ -431,15 +660,12 @@
 //                 Send the Reset Link
 //               </button>
 
-//               {/* Back to Login */}
 //               <span
 //                 className="forgot-link"
 //                 onClick={() => {
 //                   setforgotMsg("");
 //                   dispatch(clearError());
-
-//                   // ✅ CHANGE 6: Back to login should switch to "Login"
-//                   dispatch(switchAuthModal("Login"));
+//                   dispatch(switchAuthModal("login")); // ✅ FIXED (lowercase)
 //                 }}
 //               >
 //                 Back to Login 🔙
@@ -452,7 +678,7 @@
 //         {error && <div className="login-error">{error}</div>}
 
 //         {/* Submit Button */}
-//         {!isforgot && (
+//         {!isForgot && (
 //           <button
 //             type="submit"
 //             className="login-submit-btn"
@@ -463,11 +689,11 @@
 //         )}
 //       </form>
 //     </div>
+   
 //   );
 // };
 
 // export default Login;
-
 
 import React, { useState } from "react";
 import Input from "../Common/input";
@@ -485,13 +711,17 @@ import "../../css/auth/Login.css";
 import axios from "axios";
 import validator from "validator";
 
-const Login = () => {
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
+// ✅ Safe fallback if env variable is missing
+const BASE_URL =
+  import.meta.env.VITE_BASE_URL ||
+  "https://music-player-fullstack-60ns.onrender.com";
 
-  // forgot password states
-  const [forgotEmail, setforgotEmail] = useState("");
-  const [forgotMsg, setforgotMsg] = useState("");
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMsg, setForgotMsg] = useState("");
 
   const dispatch = useDispatch();
 
@@ -519,11 +749,9 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
-        {
-          email,
-          password,
-        }
+        `${BASE_URL}/api/auth/login`,
+        { email, password },
+        { withCredentials: true }
       );
 
       const data = res.data;
@@ -540,9 +768,9 @@ const Login = () => {
       dispatch(setLoading(false));
       dispatch(clearError());
       dispatch(closeAuthModal());
-    } catch (error) {
+    } catch (err) {
       const serverMessage =
-        error?.response?.data?.message || error?.response?.data?.error;
+        err?.response?.data?.message || err?.response?.data?.error;
 
       dispatch(setError(serverMessage || "Login Failed"));
       dispatch(setLoading(false));
@@ -550,31 +778,30 @@ const Login = () => {
   };
 
   // ---------------- FORGOT PASSWORD ----------------
-  const handleForgotpassword = async () => {
+  const handleForgotPassword = async () => {
     if (!forgotEmail) {
-      setforgotMsg("Please enter your email ❌");
+      setForgotMsg("Please enter your email ❌");
       return;
     }
 
     if (!validator.isEmail(forgotEmail)) {
-      setforgotMsg("Please enter a valid email address ❌");
+      setForgotMsg("Please enter a valid email address ❌");
       return;
     }
 
     try {
-      setforgotMsg("Sending reset link... ⏳");
+      setForgotMsg("Sending reset link... ⏳");
 
       await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/api/auth/forgot-password`,
-        {
-          email: forgotEmail,
-        }
+        `${BASE_URL}/api/auth/forgot-password`,
+        { email: forgotEmail },
+        { withCredentials: true }
       );
 
-      setforgotMsg("Reset link sent! Check your Email 📧✅");
-    } catch (error) {
-      setforgotMsg(
-        error?.response?.data?.message || "Failed to send reset email ❌"
+      setForgotMsg("Reset link sent! Check your Email 📧✅");
+    } catch (err) {
+      setForgotMsg(
+        err?.response?.data?.message || "Failed to send reset email ❌"
       );
     }
   };
@@ -592,30 +819,26 @@ const Login = () => {
       </p>
 
       <form className="login-form" onSubmit={handleLogin}>
-        {/* ---------------- LOGIN FORM ---------------- */}
         {!isForgot && (
           <>
             <Input
               value={email}
-              onChange={(e) => setemail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               label="Email Address"
               placeholder="xyz@gmail.com"
               type="email"
-              autoComplete="email"
             />
 
             <Input
               value={password}
-              onChange={(e) => setpassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               label="Password"
               placeholder="Min 8 Character"
               type="password"
-              autoComplete="current-password"
             />
           </>
         )}
 
-        {/* ---------------- FORGOT PASSWORD UI ---------------- */}
         <div className="forgot-wrapper">
           {!isForgot ? (
             <>
@@ -646,8 +869,7 @@ const Login = () => {
                 type="email"
                 placeholder="Enter your registered email"
                 value={forgotEmail}
-                onChange={(e) => setforgotEmail(e.target.value)}
-                autoComplete="email"
+                onChange={(e) => setForgotEmail(e.target.value)}
               />
 
               {forgotMsg && <p className="forgot-msg">{forgotMsg}</p>}
@@ -655,7 +877,7 @@ const Login = () => {
               <button
                 type="button"
                 className="forgot-btn"
-                onClick={handleForgotpassword}
+                onClick={handleForgotPassword}
               >
                 Send the Reset Link
               </button>
@@ -663,9 +885,9 @@ const Login = () => {
               <span
                 className="forgot-link"
                 onClick={() => {
-                  setforgotMsg("");
+                  setForgotMsg("");
                   dispatch(clearError());
-                  dispatch(switchAuthModal("login")); // ✅ FIXED (lowercase)
+                  dispatch(switchAuthModal("login"));
                 }}
               >
                 Back to Login 🔙
@@ -674,24 +896,20 @@ const Login = () => {
           )}
         </div>
 
-        {/* Error Message */}
         {error && <div className="login-error">{error}</div>}
 
-        {/* Submit Button */}
         {!isForgot && (
           <button
             type="submit"
             className="login-submit-btn"
             disabled={isLoading}
           >
-            <span>{isLoading ? "Logging in..." : "Login"}</span>
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         )}
       </form>
     </div>
-   
   );
 };
 
 export default Login;
-
