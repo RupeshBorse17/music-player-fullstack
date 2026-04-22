@@ -23,3 +23,13 @@ MongoDB
 Tools
 Postman (API testing)
 Git & GitHub
+
+
+BeatStream/
+│
+├── client/        # React frontend
+├── server/        # Node.js backend
+├── models/        # Database models
+├── routes/        # API routes
+├── controllers/   # Business logic
+└── config/        # Database config
