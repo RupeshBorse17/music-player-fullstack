@@ -26,6 +26,8 @@ Git & GitHub
 
 
 BeatStream/
+
+
 │
 ├── client/        # React frontend
 ├── server/        # Node.js backend
