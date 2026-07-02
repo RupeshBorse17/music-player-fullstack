@@ -192,9 +192,6 @@ FRONTEND_URL=
 
 GitHub: https://github.com/RupeshBorse17
 
-LinkedIn: *(Add your LinkedIn URL here)*
-
-Email: rupeshborse2005@gmail.com
 
 ---
 
